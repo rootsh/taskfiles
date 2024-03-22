@@ -1,0 +1,7 @@
+version: '3'
+
+tasks:
+  dockerfile:
+    desc: Lint in Dockerfile
+    cmds:
+      - docker run --rm -i ghcr.io/hadolint/hadolint < Dockerfile
