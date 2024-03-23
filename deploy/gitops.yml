@@ -15,7 +15,7 @@ tasks:
     cmds:
       - git config --global user.email "rootsh@gmail.com"
       - git config --global user.name "CI/CD"
-      - git checkout -p deploy/{{.GIT_REPO_NAME}}-{{.PIPELINE_ID}}
+      - git checkout -b deploy/{{.GIT_REPO_NAME}}-{{.PIPELINE_ID}}
       - yq e -i '.spec.source.helm.parameters[1].value = "{{.TAG}}"' {{.GIT_REPO_NAME}}.yaml
       - git commit -am 'Added tag {{.TAG}} using workflow {{.PIPELINE_ID}} for {{.GIT_REPO_NAME}}'
       - git push origin deploy/{{.GIT_REPO_NAME}}-{{.PIPELINE_ID}}
