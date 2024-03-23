@@ -11,7 +11,7 @@ tasks:
         sh: basename $(git remote get-url origin) | cut -f1 -d'.'
       PIPELINE_ID:
         sh: echo $PIPELINE_ID
-    dir: '{{.DIRECTORY_APP}}'
+    dir: '{{.DIRECTORY_APPS}}'
     cmds:
       - git checkout -p deploy/{{.GIT_REPO_NAME}}-{{.PIPELINE_ID}}
       - yq e -i '.spec.source.helm.parameters[1].value = {{.TAG}}"' {{.GIT_REPO_NAME}}.yaml
