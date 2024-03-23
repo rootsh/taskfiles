@@ -13,7 +13,7 @@ tasks:
         sh: basename $(git remote get-url origin) | cut -f1 -d'.'
       GITOPS_APP: '{{.GITOPS_APP | default "gitops"}}'
     cmds:
-      - arogvd app sync {{.GITOPS_APP}}{{.CLI_ARGS}} --insecure --config /tmp/.argocd/config
+      - arogcd app sync {{.GITOPS_APP}}{{.CLI_ARGS}} --insecure --config /tmp/.argocd/config
       - argocd app sync {{.GIT_REPO_NAME}}{{.CLI_ARGS}} --insecure --config /tmp/.argocd/config
       - argocd app wait {{.GIT_REPO_NAME}}{{.CLI_ARGS}} --health --insecure --config /tmp/.argocd/config
  
