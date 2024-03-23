@@ -1,0 +1,25 @@
+version: '3'
+
+tasks:
+  build:
+    desc: Build Docker image
+    vars:
+      BUILD_ARGS: '{{.BUILD_ARGS | default ""}}'
+      GIT_REPO_NAME:
+        sh: basename $(git remote get-url origin) | cut -f1 -d'.'
+    cmds:
+      - docker build {{.BUILD_ARGS}} -t {{.GIT_REPO_NAME}} .
+
+  push:
+    desc: Push Docker image
+    vars:
+      GIT_CURRENT_VERSION:
+        sh: git tag | tr - \~ | sort -V | tr \~ - | tail -1
+      GIT_REPO_NAME:
+        sh: basename $(git remote get-url origin) | cut -f1 -d'.'
+      REPO: '{{.REPO | default "rootsh"}}'
+      
+    cmds:
+      - echo '{{.GIT_CURRENT_VERSION}}' > version.txt
+      - docker tag {{.GIT_REPO_NAME}} {{.REPO}}/{{.GIT_REPO_NAME}}:{{.GIT_CURRENT_VERSION}}
+      - docker push {{.REPO}}/{{.GIT_REPO_NAME}}:{{.GIT_CURRENT_VERSION}}
