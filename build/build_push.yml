@@ -23,3 +23,14 @@ tasks:
       - echo '{{.GIT_CURRENT_VERSION}}' > version.txt
       - docker tag {{.GIT_REPO_NAME}} {{.REPO}}/{{.GIT_REPO_NAME}}:{{.GIT_CURRENT_VERSION}}
       - docker push {{.REPO}}/{{.GIT_REPO_NAME}}:{{.GIT_CURRENT_VERSION}}
+
+  buildx:
+    desc: Build and push multi arch Docker image
+    vars:
+      GIT_CURRENT_VERSION:
+        sh: git tag | tr - \~ | sort -V | tr \~ - | tail -1
+      GIT_REPO_NAME:
+        sh: basename $(git remote get-url origin) | cut -f1 -d'.'
+      REPO: '{{.REPO | default "rootsh"}}'
+    cmds:
+      -  docker buildx build --tag {{.REPO}}/{{.GIT_REPO_NAME}}:{{.GIT_CURRENT_VERSION}}  --platform linux/amd64,linux/arm/v7,linux/arm64 .
