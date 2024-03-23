@@ -4,7 +4,7 @@ tasks:
     desc: Pull request in ArgoCD Application
     vars:
       TAG:
-        sh: cat version.txt
+        sh: echo $TAG
       DIRECTORY_APPS:
         sh: echo $DIRECTORY_APPS
       GIT_REPO_NAME:
