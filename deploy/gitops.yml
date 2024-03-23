@@ -8,7 +8,7 @@ tasks:
       DIRECTORY_APPS:
         sh: echo $DIRECTORY_APPS
       GIT_REPO_NAME:
-        sh: basename $(git remote get-url origin) | cut -f1 -d'.'
+        sh: echo $REPO_NAME
       PIPELINE_ID:
         sh: echo $PIPELINE_ID
     dir: '{{.DIRECTORY_APPS}}'
