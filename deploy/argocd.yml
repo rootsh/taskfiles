@@ -1,0 +1,19 @@
+version: '3'
+tasks:
+  config:
+    desc: Config ArgoCD
+    cmds:
+      - mkdir -p /tmp/.argocd
+      - echo $ARGOCD_CONFIG_NAME | base64 -d > /tmp/.argocd/config
+      - chmod 0600 /tmp/.argocd/config
+  deploy:
+    desc: Deploy using ArgoCD
+    vars:
+      GIT_REPO_NAME:
+        sh: basename $(git remote get-url origin) | cut -f1 -d'.'
+      GITOPS_APP: '{{.GITOPS_APP | default "gitops"}}'
+    cmds:
+      - arogvd app sync {{.GITOPS_APP}}{{.CLI_ARGS}} --insecure --config /tmp/.argocd/config
+      - argocd app sync {{.GIT_REPO_NAME}}{{.CLI_ARGS}} --insecure --config /tmp/.argocd/config
+      - argocd app wait {{.GIT_REPO_NAME}}{{.CLI_ARGS}} --health --insecure --config /tmp/.argocd/config
+ 
