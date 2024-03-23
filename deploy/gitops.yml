@@ -5,7 +5,8 @@ tasks:
     vars:
       TAG:
         sh: cat version.txt
-      DIRECTORY_APPS: '{{.DIRECTORY_APPS}}'
+      DIRECTORY_APPS:
+        sh: echo $DIRECTORY_APPS
       GIT_REPO_NAME:
         sh: basename $(git remote get-url origin) | cut -f1 -d'.'
       PIPELINE_ID:
