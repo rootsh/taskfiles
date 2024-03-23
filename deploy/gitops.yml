@@ -1,0 +1,19 @@
+version: '3'
+tasks:
+  pr:
+    desc: Pull request in ArgoCD Application
+    vars:
+      TAG:
+        sh: cat version.txt
+      DIRECTORY_APPS: '{{.DIRECTORY_APPS}}'
+      GIT_REPO_NAME:
+        sh: basename $(git remote get-url origin) | cut -f1 -d'.'
+      PIPELINE_ID:
+        sh: echo $PIPELINE_ID
+    cmds:
+      - cd {{.DIRECTORY_APPS}}
+      - git checkout -p deploy/{{.GIT_REPO_NAME}}-{{.PIPELINE_ID}}
+      - yq e -i '.spec.source.helm.parameters[1].value = {{.TAG}}"' {{.GIT_REPO_NAME}}.yaml
+      - git commit -am 'Added tag {{.TAG}} using workflow {{.PIPELINE_ID}} for {{.GIT_REPO_NAME}}'
+      - gh pr create --title "CD {{.PIPELINE_ID}} for {{.GIT_REPO_NAME}}" --body "Generated using CI/CD using workflow {{.PIPELINE_ID}} for ArgoCD application {{.GIT_REPO_NAME}}"
+      - gh pr merge --auto --merge  deploy/{{.GIT_REPO_NAME}}-{{.PIPELINE_ID}}
