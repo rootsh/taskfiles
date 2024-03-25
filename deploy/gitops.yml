@@ -13,7 +13,7 @@ tasks:
       - git config --global user.email "{{.EMAIL}}"
       - git config --global user.name "CI/CD"
       - git checkout -b deploy/{{.GIT_REPO_NAME}}-{{.PIPELINE_ID}}
-      - yq e -i '.spec.source.helm.parameters[1].value = "{{.TAG}}"' {{.GIT_REPO_NAME}}.yaml
+      - yq e -i '.spec.source.helm.parameters[0].value = "{{.TAG}}"' {{.GIT_REPO_NAME}}.yaml
       - git commit -am 'Added tag {{.TAG}} using workflow {{.PIPELINE_ID}} for {{.GIT_REPO_NAME}}'
       - git push origin deploy/{{.GIT_REPO_NAME}}-{{.PIPELINE_ID}}
       - gh pr create --title "CD {{.PIPELINE_ID}} for {{.GIT_REPO_NAME}}" --body "Generated using CI/CD using workflow {{.PIPELINE_ID}} for ArgoCD application {{.GIT_REPO_NAME}}"
