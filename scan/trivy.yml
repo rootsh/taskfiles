@@ -1,0 +1,14 @@
+version: '3'
+
+tasks:
+  image:
+    desc: Scan vulnerability for container image
+    vars:
+      GIT_REPO_NAME:
+        sh: basename $(git remote get-url origin) | cut -f1 -d'.'
+      GIT_CURRENT_VERSION:
+        sh: git tag | tr - \~ | sort -V | tr \~ - | tail -1
+      REPO: '{{.REPO_NAME | default "rootsh"}}'  
+      SEVERITY: '{{.SEVERITY | default "HIGH,CRITICAL"}}'
+    cmds:
+      - trivy image --severity {{.SEVERITY}} --format sarif --output trivy-results.sarif {{.REPO}}/{{.GIT_REPO_NAME}}:{{.GIT_CURRENT_VERSION}}
