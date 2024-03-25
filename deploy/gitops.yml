@@ -3,11 +3,10 @@ tasks:
   pr:
     desc: Pull request in ArgoCD Application
     vars:
-      TAG: '{{.TAG | default ""}}'
-      DIRECTORY_APPS: '{{.DIRECTORY_APPS | default ""}}'
-      GIT_REPO_NAME: '{{.GIT_REPO_NAME | default ""}}'
-      PIPELINE_ID: '{{.PIPELINE_ID | default ""}}'
-      EMAIL: '{{.EMAIL | "rootsh@gmail.com"}}'
+      TAG: '{{.TAG}}'
+      GIT_REPO_NAME: '{{.GIT_REPO_NAME}}'
+      PIPELINE_ID: '{{.PIPELINE_ID}}'
+      EMAIL: '{{.EMAIL | default "rootsh@gmail.com"}}'
     dir: '{{.DIRECTORY_APPS}}'
     cmds:
       - git config --global user.email "{{.EMAIL}}"
