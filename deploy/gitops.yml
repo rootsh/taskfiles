@@ -3,17 +3,14 @@ tasks:
   pr:
     desc: Pull request in ArgoCD Application
     vars:
-      TAG:
-        sh: echo $TAG
-      DIRECTORY_APPS:
-        sh: echo $DIRECTORY_APPS
-      GIT_REPO_NAME:
-        sh: echo $REPO_NAME
-      PIPELINE_ID:
-        sh: echo $PIPELINE_ID
+      TAG: '{{.TAG}}'
+      DIRECTORY_APPS: '{{.DIRECTORY_APPS}}'
+      GIT_REPO_NAME: '{{.GIT_REPO_NAME}}'
+      PIPELINE_ID: '{{.PIPELINE_ID}}'
+      EMAIL: '{{.EMAIL | "rootsh@gmail.com"}}'
     dir: '{{.DIRECTORY_APPS}}'
     cmds:
-      - git config --global user.email "rootsh@gmail.com"
+      - git config --global user.email "{{.EMAIL}}"
       - git config --global user.name "CI/CD"
       - git checkout -b deploy/{{.GIT_REPO_NAME}}-{{.PIPELINE_ID}}
       - yq e -i '.spec.source.helm.parameters[1].value = "{{.TAG}}"' {{.GIT_REPO_NAME}}.yaml
