@@ -1,5 +1,7 @@
 version: '3'
 
+interval: 500ms
+
 tasks:
   k8s_port_foward:
     desc: Kubectl port-foward
@@ -8,6 +10,7 @@ tasks:
         sh: basename $(git remote get-url origin) | cut -f1 -d'.'
       LOCAL_PORT: '{{.LOCAL_PORT | default "8080"}}'
       SERVICE_PORT: '{{.SERVICE_PORT | default "8080"}}'
+    watch: true
     cmds:
       - kubectl port-forward svc/{{.GIT_REPO_NAME}} {{.LOCAL_PORT}}:{{.SERVICE_PORT}} -n {{.GIT_REPO_NAME}} &
   k6:
