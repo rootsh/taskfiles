@@ -18,7 +18,6 @@ tasks:
       GIT_REPO_NAME:
         sh: basename $(git remote get-url origin) | cut -f1 -d'.'
       REPO: '{{.REPO | default "rootsh"}}'
-      
     cmds:
       - echo '{{.GIT_CURRENT_VERSION}}' > version.txt
       - docker tag {{.GIT_REPO_NAME}} {{.REPO}}/{{.GIT_REPO_NAME}}:{{.GIT_CURRENT_VERSION}}
