@@ -9,6 +9,6 @@ tasks:
       LOCAL_PORT: '{{.LOCAL_PORT | default "8080"}}'
       SERVICE_PORT: '{{.SERVICE_PORT | default "8080"}}'
       K6_FILE: '{{.K6_FILE | default "qa/k6/run.js"}}'
-    cmds: |
-      kubectl port-forward svc/{{.GIT_REPO_NAME}} {{.LOCAL_PORT}}:{{.SERVICE_PORT}} -n {{.GIT_REPO_NAME}} &
-      ./k6 run --out json=k6_results.json {{.K6_FILE}}
+    cmds:
+      - kubectl port-forward svc/{{.GIT_REPO_NAME}} {{.LOCAL_PORT}}:{{.SERVICE_PORT}} -n {{.GIT_REPO_NAME}} &
+      - ./k6 run --out json=k6_results.json {{.K6_FILE}}
