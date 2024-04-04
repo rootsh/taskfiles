@@ -1,0 +1,29 @@
+version: '3'
+
+tasks:
+  kubectl_install:
+    desc: Install kubectl binary
+    vars:
+      LOCAL_BIN: ~/.local/bin
+      ARCH: '{{.ARCH | default "arm64"}}'
+    cmds:
+      - mkdir -p {{.LOCAL_BIN}}
+      - curl -L "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/{{.ARCH}}/kubectl" -o {{.LOCAL_BIN}}/kubectl
+      - chmod +x {{.LOCAL_BIN}}/kubectl
+      
+  run_zap_scan_api:
+    desc: Run OWASP Zap Scan API
+    vars:
+      LOCAL_BIN: ~/.local/bin
+      GIT_REPO_NAME:
+        sh: basename $(git remote get-url origin) | cut -f1 -d'.'
+      LOCAL_PORT: '{{.LOCAL_PORT | default "8080"}}'
+      SERVICE_PORT: '{{.SERVICE_PORT | default "8080"}}'
+      ZAP_CONFIG: '{{.ZAP_CONFIG | default "-z "-config globalexcludeurl.url_list.url.regex='^http:\/\/localhost:8080\/swagger.*$'""}}'
+      TARGET: '{{.TARGET}} | default "http://localhost:8080/swagger/doc.json"'
+      API_FORMAT: '{{.API_FORMAT | default "openapi"}}'
+    cmds:
+      - echo $KUBECONFIG_B64 | base64 -d > /tmp/kubeconfig
+      - mkdir /zap/wrk
+      - {{.LOCAL_BIN}}/kubectl port-forward svc/{{.GIT_REPO_NAME}} {{.LOCAL_PORT}}:{{.SERVICE_PORT}} -n {{.GIT_REPO_NAME}} --kubeconfig /tmp/kubeconfig &
+      - zap-api-scan.py -t $TARGET  -f {{.API_FORMAT}} -r zap-scan-result.html {{.ZAP_CONFIG}} -S

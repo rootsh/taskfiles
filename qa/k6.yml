@@ -2,7 +2,7 @@ version: '3'
 
 tasks:
   k6_k8s_service:
-    desc: Kubectl port-foward
+    desc: kubectl port-foward and k6 run
     vars:
       GIT_REPO_NAME:
         sh: basename $(git remote get-url origin) | cut -f1 -d'.'
