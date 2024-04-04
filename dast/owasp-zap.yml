@@ -19,11 +19,11 @@ tasks:
         sh: basename $(git remote get-url origin) | cut -f1 -d'.'
       LOCAL_PORT: '{{.LOCAL_PORT | default "8080"}}'
       SERVICE_PORT: '{{.SERVICE_PORT | default "8080"}}'
-      ZAP_CONFIG: '{{.ZAP_CONFIG | default "-z "-config globalexcludeurl.url_list.url.regex='^http:\/\/localhost:8080\/swagger.*$'""}}'
+      ZAP_CONFIG: '{{.ZAP_CONFIG | default ""}}'
       TARGET: '{{.TARGET}} | default "http://localhost:8080/swagger/doc.json"'
       API_FORMAT: '{{.API_FORMAT | default "openapi"}}'
     cmds:
       - echo $KUBECONFIG_B64 | base64 -d > /tmp/kubeconfig
       - mkdir /zap/wrk
-      - {{.LOCAL_BIN}}/kubectl port-forward svc/{{.GIT_REPO_NAME}} {{.LOCAL_PORT}}:{{.SERVICE_PORT}} -n {{.GIT_REPO_NAME}} --kubeconfig /tmp/kubeconfig &
-      - zap-api-scan.py -t $TARGET  -f {{.API_FORMAT}} -r zap-scan-result.html {{.ZAP_CONFIG}} -S
+      - ~/.local/bin/kubectl port-forward svc/{{.GIT_REPO_NAME}} {{.LOCAL_PORT}}:{{.SERVICE_PORT}} -n {{.GIT_REPO_NAME}} --kubeconfig /tmp/kubeconfig &
+      - zap-api-scan.py -t $TARGET -f {{.API_FORMAT}} -r zap-scan-result.html {{.ZAP_CONFIG}} -S
