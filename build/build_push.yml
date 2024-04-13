@@ -34,4 +34,4 @@ tasks:
       ARCH: '{{.ARCH | default "linux/amd64,linux/arm/v7,linux/arm64"}}'
     cmds:
       - echo '{{.GIT_CURRENT_VERSION}}' > version.txt
-      - docker buildx build --push --tag {{.REPO}}/{{.GIT_REPO_NAME}}:{{.GIT_CURRENT_VERSION}} --platform {{.ARCH}} .
+      #- docker buildx build --push --tag {{.REPO}}/{{.GIT_REPO_NAME}}:{{.GIT_CURRENT_VERSION}} --platform {{.ARCH}} .
