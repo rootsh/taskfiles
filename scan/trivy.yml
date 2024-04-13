@@ -20,5 +20,5 @@ tasks:
       VUL:
         sh: jq '.runs[].tool.driver.rules[].properties | select (.precision=="very-high")' trivy-results.sarif
     cmds:
-      - if [[ ! -z "$VUL" ]]; then ; else gh issue create --title "It has vulnerability" --label security --body "Check at https://github.com/{{.GIT_REPO}}/security/code-scanning" --repo {{.GIT_REPO}} echo "No vulnerabilities"; fi
+      - VUL={{.VUL}} if [[ ! -z "$VUL" ]]; then ; else gh issue create --title "It has vulnerability" --label security --body "Check at https://github.com/{{.GIT_REPO}}/security/code-scanning" --repo {{.GIT_REPO}}; echo "No vulnerabilities"; fi
    
