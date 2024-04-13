@@ -18,7 +18,5 @@ tasks:
       GIT_REPO:
         sh: echo $(git remote get-url origin) | sed -e 's/^https:\/\/github\.com\///g'
     cmds:
-      - echo {{.GIT_REPO}}
-      - echo {{.GIT_REMOTE}}
-      #- VUL=$(jq '.runs[].tool.driver.rules[].properties | select (.precision=="very-high")' trivy-results.sarif); if [[ ! -z "$VUL" ]]; then gh issue create --title "It has vulnerability" --label security --body "Check at https://github.com/{{.GIT_REPO}}/github/security/code-scanning" --repo {{.GIT_REPO}}; else echo "No vulnerabilities"; fi
+      - VUL=$(jq '.runs[].tool.driver.rules[].properties | select (.precision=="very-high")' trivy-results.sarif); if [[ ! -z "$VUL" ]]; then gh issue create --title "It has vulnerability" --label security --body "Check at https://github.com/{{.GIT_REPO}}/github/security/code-scanning" --repo {{.GIT_REPO}}; else echo "No vulnerabilities"; fi
    
