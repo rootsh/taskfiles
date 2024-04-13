@@ -10,7 +10,7 @@ tasks:
     desc: Deploy using ArgoCD
     vars:
       GIT_REPO_NAME:
-        sh: basename $(git remote get-url origin) | cut -f1 -d'.'
+        sh: basename $(git remote get-url origin)
       GITOPS_APP: '{{.GITOPS_APP | default "gitops"}}'
     cmds:
       - argocd app wait {{.GITOPS_APP}}{{.CLI_ARGS}} --operation --insecure --config /tmp/.argocd/config

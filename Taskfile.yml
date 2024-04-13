@@ -1,0 +1,17 @@
+version: '3'
+
+includes:
+  hadolint:
+    taskfile: ./lint/hadolint.yml
+  build:
+    taskfile: ./build/build_push.yml
+  deploy:
+    taskfile: ./deploy/gitops.yml
+  argocd:
+    taskfile: ./deploy/argocd.yml
+  trivy:
+    taskfile: ./scan/trivy.yml
+  k6:
+    taskfile: ./qa/k6.yml
+  owasp-zap:
+    taskfile: ./dast/owasp-zap.yml
