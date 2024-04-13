@@ -6,7 +6,7 @@ tasks:
     vars:
       BUILD_ARGS: '{{.BUILD_ARGS | default ""}}'
       GIT_REPO_NAME:
-        sh: basename $(git remote get-url origin) | cut -f1 -d'.'
+        sh: basename $(git remote get-url origin)
     cmds:
       - docker build {{.BUILD_ARGS}} -t {{.GIT_REPO_NAME}} .
 
@@ -16,7 +16,7 @@ tasks:
       GIT_CURRENT_VERSION:
         sh: git tag | tr - \~ | sort -V | tr \~ - | tail -1
       GIT_REPO_NAME:
-        sh: basename $(git remote get-url origin) | cut -f1 -d'.'
+        sh: basename $(git remote get-url origin)
       REPO: '{{.REPO | default "rootsh"}}'
     cmds:
       - echo '{{.GIT_CURRENT_VERSION}}' > version.txt
@@ -29,7 +29,7 @@ tasks:
       GIT_CURRENT_VERSION:
         sh: git tag | tr - \~ | sort -V | tr \~ - | tail -1
       GIT_REPO_NAME:
-        sh: basename $(git remote get-url origin) | cut -f1 -d'.'
+        sh: basename $(git remote get-url origin)
       REPO: '{{.REPO | default "rootsh"}}'
       ARCH: '{{.ARCH | default "linux/amd64,linux/arm/v7,linux/arm64"}}'
     cmds:

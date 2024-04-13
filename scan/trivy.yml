@@ -5,7 +5,7 @@ tasks:
     desc: Scan vulnerability for container image
     vars:
       GIT_REPO_NAME:
-        sh: basename $(git remote get-url origin) | cut -f1 -d'.'
+        sh: basename $(git remote get-url origin)
       GIT_CURRENT_VERSION:
         sh: git tag | tr - \~ | sort -V | tr \~ - | tail -1
       REPO: '{{.REPO_NAME | default "rootsh"}}'  
@@ -16,9 +16,7 @@ tasks:
     desc: Create Github Issue if have vulnerabilities
     vars:
       GIT_REPO:
-        sh: echo $(git remote get-url origin) | cut -f2 -d':' | cut -f1 -d'.'
-      GIT_REMOTE:
-        sh: echo $(git remote get-url origin)
+        sh: echo $(git remote get-url origin) | sed -e 's/^https:\/\/github\.com\///g'
     cmds:
       - echo {{.GIT_REPO}}
       - echo {{.GIT_REMOTE}}
