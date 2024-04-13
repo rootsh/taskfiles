@@ -12,3 +12,13 @@ tasks:
       SEVERITY: '{{.SEVERITY | default "HIGH,CRITICAL"}}'
     cmds:
       - trivy image --severity {{.SEVERITY}} --format sarif --output trivy-results.sarif {{.REPO}}/{{.GIT_REPO_NAME}}:{{.GIT_CURRENT_VERSION}}
+  issue:
+    desc: Create Github Issue if have vulnerabilities
+    vars:
+      GIT_REPO:
+        sh: git remote get-url origin | cut -f2 -d':' | cut -f1 -d'/'
+      VUL:
+        sh: jq '.runs[].tool.driver.rules[].properties | select (.precision=="very-high")' trivy-results.sarif
+    cmds:
+      - if [[ ! -z "$VUL" ]]; then ; else gh issue create --title "It has vulnerability" --label security --body "Check at https://github.com/{{.GIT_REPO}}/security/code-scanning" --repo {{.GIT_REPO}} echo "No vulnerabilities"; fi
+   
