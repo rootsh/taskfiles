@@ -16,7 +16,8 @@ tasks:
     desc: Create Github Issue if have vulnerabilities
     vars:
       GIT_REPO:
-        sh: git remote get-url origin | cut -f2 -d':' | cut -f1 -d'.'
+        sh: echo $(git remote get-url origin) | cut -f2 -d':' | cut -f1 -d'.'
     cmds:
+      - echo {{.GIT_REPO}}
       - VUL=$(jq '.runs[].tool.driver.rules[].properties | select (.precision=="very-high")' trivy-results.sarif); if [[ ! -z "$VUL" ]]; then gh issue create --title "It has vulnerability" --label security --body "Check at https://github.com/{{.GIT_REPO}}/github/security/code-scanning" --repo {{.GIT_REPO}}; else echo "No vulnerabilities"; fi
    
